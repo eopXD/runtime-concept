@@ -2,6 +2,7 @@
 #include <ostream>
 #include <string>
 #include <vector>
+#include <memory>
 
 //using object_t = int;
 
@@ -16,40 +17,28 @@ void draw(const int& obj, std::ostream& out, size_t position)
 // don't need to compile for the original object.
 class object_t
 {
-/*public:
-  object_t(const int& x) : self_(x)
-  { }
-
-  friend void draw(const object_t& obj, std::ostream& out, size_t position)
-  {
-    draw(obj.self_, out, position);
-  }
-private:
-  int self_;
-*/
 public:
   object_t(const int& x) : self_(new int_model_t(x))
   { std::cout << "ctor\n"; }
   object_t(const object_t& x) : self_(new int_model_t(*x.self_))
   { std::cout << "copy\n"; }
+  object_t(object_t&& x) : self_(std::move(x.self_))
+  { std::cout << "move\n"; }
 
   object_t& operator=(const object_t& x)
   {
     std::cout << "copy assignment\n";
     object_t tmp(x);
-    *this = std::move(tmp);
+    this->self_ = std::move(tmp.self_);
     return *this;
   }
   object_t& operator=(object_t&& x)
   {
     std::cout << "move assignment\n";
-    object_t tmp(x);
-    *this = std::move(tmp);
+    this->self_ = std::move(x.self_);
     return *this;
   }
 
-  object_t(object_t&& x) : self_(std::move(x.self_))
-  { std::cout << "move\n"; }
 
   friend void draw(const object_t& obj, std::ostream& out, size_t position)
   {
