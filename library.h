@@ -32,6 +32,25 @@ public:
   { std::cout << "ctor\n"; }
   object_t(const object_t& x) : self_(new int_model_t(*x.self_))
   { std::cout << "copy\n"; }
+
+  object_t& operator=(const object_t& x)
+  {
+    std::cout << "copy assignment\n";
+    object_t tmp(x);
+    *this = std::move(tmp);
+    return *this;
+  }
+  object_t& operator=(object_t&& x)
+  {
+    std::cout << "move assignment\n";
+    object_t tmp(x);
+    *this = std::move(tmp);
+    return *this;
+  }
+
+  object_t(object_t&& x) : self_(std::move(x.self_))
+  { std::cout << "move\n"; }
+
   friend void draw(const object_t& obj, std::ostream& out, size_t position)
   {
     obj.self_->draw(out, position);
