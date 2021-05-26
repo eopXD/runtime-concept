@@ -28,8 +28,10 @@ private:
   int self_;
 */
 public:
-  object_t(const int &x) : self_(new int_model_t(x))
-  { }
+  object_t(const int& x) : self_(new int_model_t(x))
+  { std::cout << "ctor\n"; }
+  object_t(const object_t& x) : self_(new int_model_t(*x.self_))
+  { std::cout << "copy\n"; }
   friend void draw(const object_t& obj, std::ostream& out, size_t position)
   {
     obj.self_->draw(out, position);
