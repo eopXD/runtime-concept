@@ -18,7 +18,7 @@ void draw(const int& obj, std::ostream& out, size_t position)
 class object_t
 {
 public:
-  object_t(const int& x) : self_(new int_model_t(x))
+  object_t(int x) : self_(new int_model_t(std::move(x)))
   { std::cout << "ctor\n"; }
   object_t(const object_t& x) : self_(new int_model_t(*x.self_))
   { std::cout << "copy\n"; }
@@ -47,7 +47,7 @@ public:
 private: // private implementaion (PIMPL)
   struct int_model_t
   {
-    int_model_t(const int& x) : data_ (x)
+    int_model_t(int x) : data_ (std::move(x))
     { }
     // this method gives caller interface, no underlying data exposed.
     void draw(std::ostream& out, size_t position) const
